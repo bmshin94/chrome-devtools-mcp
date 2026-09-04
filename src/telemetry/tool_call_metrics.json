@@ -126,7 +126,8 @@
       },
       {
         "name": "page_id",
-        "argType": "number"
+        "argType": "number",
+        "isDeprecated": true
       }
     ]
   },

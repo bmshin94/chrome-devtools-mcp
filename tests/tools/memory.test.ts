@@ -57,7 +57,7 @@ describe('memory', () => {
       await withMcpContext(async (response, context) => {
         const filePath = join(tmpdir(), 'test-screenshot.heapsnapshot');
         try {
-          await takeHeapSnapshot.handler(
+          await takeHeapSnapshot().handler(
             {params: {filePath}, page: context.getSelectedMcpPage()},
             response,
             context,
@@ -79,7 +79,7 @@ describe('memory', () => {
       context.ensureExtension.resolves('/canonical/test.heapsnapshot');
       page.pptrPage.captureHeapSnapshot.resolves();
 
-      await takeHeapSnapshot.handler(
+      await takeHeapSnapshot().handler(
         {params: {filePath: 'test.heapsnapshot'}, page},
         response,
         context,
@@ -115,7 +115,7 @@ describe('memory', () => {
         retainedByContextSummary,
       );
 
-      await getHeapSnapshotSummary.handler(
+      await getHeapSnapshotSummary().handler(
         {params: {filePath: 'test.heapsnapshot'}},
         response,
         context,
@@ -153,7 +153,7 @@ describe('memory', () => {
       const aggregates = createMockHeapSnapshotAggregateData();
       context.getHeapSnapshotAggregates.resolves(aggregates);
 
-      await getHeapSnapshotDetails.handler(
+      await getHeapSnapshotDetails().handler(
         {params: {filePath: 'test.heapsnapshot'}},
         response,
         context,
@@ -177,7 +177,7 @@ describe('memory', () => {
       const aggregates = createMockHeapSnapshotAggregateData();
       context.getHeapSnapshotAggregates.resolves(aggregates);
 
-      await getHeapSnapshotDetails.handler(
+      await getHeapSnapshotDetails().handler(
         {
           params: {
             filePath: 'test.heapsnapshot',
@@ -211,7 +211,7 @@ describe('memory', () => {
       const nodes = createMockItemsRange();
       context.getHeapSnapshotNodesById.resolves(nodes);
 
-      await getHeapSnapshotClassNodes.handler(
+      await getHeapSnapshotClassNodes().handler(
         {params: {filePath: 'test.heapsnapshot', id: 19}},
         response,
         context,
@@ -235,7 +235,7 @@ describe('memory', () => {
       const nodes = createMockItemsRange();
       context.getHeapSnapshotNodesById.resolves(nodes);
 
-      await getHeapSnapshotClassNodes.handler(
+      await getHeapSnapshotClassNodes().handler(
         {
           params: {
             filePath: 'test.heapsnapshot',
@@ -270,7 +270,7 @@ describe('memory', () => {
       const retainers = createMockItemsRange();
       context.getHeapSnapshotRetainers.resolves(retainers);
 
-      await getHeapSnapshotRetainers.handler(
+      await getHeapSnapshotRetainers().handler(
         {params: {filePath: 'test.heapsnapshot', nodeId: 25341}},
         response,
         context,
@@ -293,7 +293,7 @@ describe('memory', () => {
       const retainers = createMockItemsRange();
       context.getHeapSnapshotRetainers.resolves(retainers);
 
-      await getHeapSnapshotRetainers.handler(
+      await getHeapSnapshotRetainers().handler(
         {
           params: {
             filePath: 'test.heapsnapshot',
@@ -325,7 +325,7 @@ describe('memory', () => {
       const objectInfo = createMockObjectInfo();
       context.getHeapSnapshotObjectDetails.resolves(objectInfo);
 
-      await getHeapSnapshotObjectDetails.handler(
+      await getHeapSnapshotObjectDetails().handler(
         {params: {filePath: 'test.heapsnapshot', nodeId: 25341}},
         response,
         context,
@@ -348,7 +348,7 @@ describe('memory', () => {
       const {context, response} = createHandlerMocks();
       context.closeHeapSnapshot.resolves(true);
 
-      await closeHeapSnapshot.handler(
+      await closeHeapSnapshot().handler(
         {params: {filePath: 'test.heapsnapshot'}},
         response,
         context,
@@ -369,7 +369,7 @@ describe('memory', () => {
       context.closeHeapSnapshot.resolves(false);
 
       await assert.rejects(
-        closeHeapSnapshot.handler(
+        closeHeapSnapshot().handler(
           {params: {filePath: 'test.heapsnapshot'}},
           response,
           context,
@@ -388,7 +388,7 @@ describe('memory', () => {
       const retainingPaths = createMockRetainingPaths();
       context.getHeapSnapshotRetainingPaths.resolves(retainingPaths);
 
-      await getHeapSnapshotRetainingPaths.handler(
+      await getHeapSnapshotRetainingPaths().handler(
         {params: {filePath: 'test.heapsnapshot', nodeId: 45901}},
         response,
         context,
@@ -413,7 +413,7 @@ describe('memory', () => {
       const retainingPaths = createMockRetainingPaths();
       context.getHeapSnapshotRetainingPaths.resolves(retainingPaths);
 
-      await getHeapSnapshotRetainingPaths.handler(
+      await getHeapSnapshotRetainingPaths().handler(
         {
           params: {
             filePath: 'test.heapsnapshot',
@@ -448,7 +448,7 @@ describe('memory', () => {
       const edges = createMockItemsRange();
       context.getHeapSnapshotEdges.resolves(edges);
 
-      await getHeapSnapshotEdges.handler(
+      await getHeapSnapshotEdges().handler(
         {params: {filePath: 'test.heapsnapshot', nodeId: 25341}},
         response,
         context,
@@ -475,7 +475,7 @@ describe('memory', () => {
       const edges = createMockItemsRange();
       context.getHeapSnapshotEdges.resolves(edges);
 
-      await getHeapSnapshotEdges.handler(
+      await getHeapSnapshotEdges().handler(
         {
           params: {
             filePath: 'test.heapsnapshot',
@@ -514,7 +514,7 @@ describe('memory', () => {
       const dominators = createMockDominatorChain();
       context.getHeapSnapshotDominators.resolves(dominators);
 
-      await getHeapSnapshotDominators.handler(
+      await getHeapSnapshotDominators().handler(
         {params: {filePath: 'test.heapsnapshot', nodeId: 25341}},
         response,
         context,
@@ -538,7 +538,7 @@ describe('memory', () => {
       const diffs = createMockClassDiffs();
       context.getHeapSnapshotClassDiffs.resolves(diffs);
 
-      await compareHeapSnapshots.handler(
+      await compareHeapSnapshots().handler(
         {
           params: {
             baseFilePath: 'heap1.heapsnapshot',
@@ -565,7 +565,7 @@ describe('memory', () => {
       const detailedDiff = createMockDetailedClassDiff();
       context.getHeapSnapshotDetailedClassDiff.resolves(detailedDiff);
 
-      await compareHeapSnapshots.handler(
+      await compareHeapSnapshots().handler(
         {
           params: {
             baseFilePath: 'heap1.heapsnapshot',
@@ -596,7 +596,7 @@ describe('memory', () => {
       const duplicateStrings = createMockDuplicateStrings();
       context.getHeapSnapshotDuplicateStrings.resolves(duplicateStrings);
 
-      await getHeapSnapshotDuplicateStrings.handler(
+      await getHeapSnapshotDuplicateStrings().handler(
         {params: {filePath: 'test.heapsnapshot'}},
         response,
         context,
@@ -618,7 +618,7 @@ describe('memory', () => {
       const duplicateStrings = createMockDuplicateStrings();
       context.getHeapSnapshotDuplicateStrings.resolves(duplicateStrings);
 
-      await getHeapSnapshotDuplicateStrings.handler(
+      await getHeapSnapshotDuplicateStrings().handler(
         {
           params: {
             filePath: 'test.heapsnapshot',
@@ -648,7 +648,7 @@ describe('memory', () => {
       const range = createMockItemsRange();
       context.queryHeapSnapshotObjects.resolves(range);
 
-      await queryHeapSnapshotObjects.handler(
+      await queryHeapSnapshotObjects().handler(
         {params: {filePath: 'test.heapsnapshot'}},
         response,
         context,
@@ -680,7 +680,7 @@ describe('memory', () => {
       const range = createMockItemsRange();
       context.queryHeapSnapshotObjects.resolves(range);
 
-      await queryHeapSnapshotObjects.handler(
+      await queryHeapSnapshotObjects().handler(
         {
           params: {
             filePath: 'test.heapsnapshot',

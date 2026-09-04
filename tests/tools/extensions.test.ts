@@ -28,7 +28,7 @@ describe('extensions', () => {
       const {context, response} = createHandlerMocks();
       context.installExtension.resolves('ext-123');
 
-      await installExtension.handler(
+      await installExtension().handler(
         {params: {path: '/path/to/extension'}},
         response,
         context,
@@ -50,7 +50,7 @@ describe('extensions', () => {
       const {context, response} = createHandlerMocks();
       context.uninstallExtension.resolves();
 
-      await uninstallExtension.handler(
+      await uninstallExtension().handler(
         {params: {id: 'ext-123'}},
         response,
         context,
@@ -68,7 +68,7 @@ describe('extensions', () => {
     it('sets list extensions on response', async () => {
       const {context, response} = createHandlerMocks();
 
-      await listExtensions.handler({params: {}}, response, context);
+      await listExtensions().handler({params: {}}, response, context);
 
       sinon.assert.calledOnceWithExactly(response.setListExtensions);
     });
@@ -84,7 +84,7 @@ describe('extensions', () => {
       context.getExtension.resolves(mockExtension);
       context.installExtension.resolves('ext-123');
 
-      await reloadExtension.handler(
+      await reloadExtension().handler(
         {params: {id: 'ext-123'}},
         response,
         context,
@@ -107,7 +107,7 @@ describe('extensions', () => {
 
       await assert.rejects(
         async () => {
-          await reloadExtension.handler(
+          await reloadExtension().handler(
             {params: {id: 'non-existent'}},
             response,
             context,
@@ -127,7 +127,7 @@ describe('extensions', () => {
       const {context, response} = createHandlerMocks();
       context.triggerExtensionAction.resolves();
 
-      await triggerExtensionAction.handler(
+      await triggerExtensionAction().handler(
         {params: {id: 'ext-123'}},
         response,
         context,

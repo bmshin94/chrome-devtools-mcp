@@ -38,7 +38,11 @@ describe('comments tools', () => {
       const lines = trackResponseLines(response);
       page.getDevToolsPage.resolves(undefined);
 
-      await getDevtoolsComments.handler({params: {}, page}, response, context);
+      await getDevtoolsComments().handler(
+        {params: {}, page},
+        response,
+        context,
+      );
 
       sinon.assert.calledOnce(page.getDevToolsPage);
       sinon.assert.calledOnceWithExactly(
@@ -67,7 +71,11 @@ describe('comments tools', () => {
 
       devtoolsPage.evaluate.resolves([mockThread]);
 
-      await getDevtoolsComments.handler({params: {}, page}, response, context);
+      await getDevtoolsComments().handler(
+        {params: {}, page},
+        response,
+        context,
+      );
 
       sinon.assert.calledOnce(page.getDevToolsPage);
       sinon.assert.calledOnce(devtoolsPage.evaluate);
@@ -82,7 +90,11 @@ describe('comments tools', () => {
       page.getDevToolsPage.resolves(devtoolsPage);
       devtoolsPage.evaluate.resolves([]);
 
-      await getDevtoolsComments.handler({params: {}, page}, response, context);
+      await getDevtoolsComments().handler(
+        {params: {}, page},
+        response,
+        context,
+      );
 
       sinon.assert.calledOnce(page.getDevToolsPage);
       sinon.assert.calledOnce(devtoolsPage.evaluate);
@@ -96,7 +108,7 @@ describe('comments tools', () => {
       const lines = trackResponseLines(response);
       page.getDevToolsPage.resolves(undefined);
 
-      await resolveDevtoolsComment.handler(
+      await resolveDevtoolsComment().handler(
         {params: {threadId: 'comment-1'}, page},
         response,
         context,
@@ -113,7 +125,7 @@ describe('comments tools', () => {
       page.getDevToolsPage.resolves(devtoolsPage);
       devtoolsPage.evaluate.resolves(true);
 
-      await resolveDevtoolsComment.handler(
+      await resolveDevtoolsComment().handler(
         {
           params: {
             threadId: 'comment-1',
@@ -136,7 +148,7 @@ describe('comments tools', () => {
       page.getDevToolsPage.resolves(devtoolsPage);
       devtoolsPage.evaluate.resolves(false);
 
-      await resolveDevtoolsComment.handler(
+      await resolveDevtoolsComment().handler(
         {params: {threadId: 'comment-nonexistent'}, page},
         response,
         context,
@@ -153,7 +165,7 @@ describe('comments tools', () => {
       const lines = trackResponseLines(response);
       page.getDevToolsPage.resolves(undefined);
 
-      await revealInDevtools.handler(
+      await revealInDevtools().handler(
         {params: {panelName: 'elements'}, page},
         response,
         context,
@@ -174,7 +186,7 @@ describe('comments tools', () => {
       });
       devtoolsPage.evaluate.resolves(undefined);
 
-      await revealInDevtools.handler(
+      await revealInDevtools().handler(
         {
           params: {
             panelName: 'elements',
@@ -202,7 +214,7 @@ describe('comments tools', () => {
       page.resolveReqidToCdpRequestId.returns('cdp-req-123');
       devtoolsPage.evaluate.resolves(undefined);
 
-      await revealInDevtools.handler(
+      await revealInDevtools().handler(
         {
           params: {
             panelName: 'network',
@@ -228,7 +240,7 @@ describe('comments tools', () => {
       page.resolveReqidToCdpRequestId.returns(undefined);
       devtoolsPage.evaluate.resolves(undefined);
 
-      await revealInDevtools.handler(
+      await revealInDevtools().handler(
         {
           params: {
             panelName: 'elements',
@@ -254,7 +266,7 @@ describe('comments tools', () => {
       });
       devtoolsPage.evaluate.resolves(undefined);
 
-      await revealInDevtools.handler(
+      await revealInDevtools().handler(
         {
           params: {
             uid: 'uid-header',
@@ -283,7 +295,7 @@ describe('comments tools', () => {
       const devtoolsPage = createMockPuppeteerPage();
       page.openDevTools.resolves(devtoolsPage);
 
-      await openDevtools.handler({params: {}, page}, response, context);
+      await openDevtools().handler({params: {}, page}, response, context);
 
       sinon.assert.calledOnce(page.openDevTools);
       sinon.assert.calledOnceWithExactly(
@@ -297,7 +309,7 @@ describe('comments tools', () => {
       const {page, context, response} = createHandlerMocks();
       page.openDevTools.rejects(new Error('Connection closed'));
 
-      await openDevtools.handler({params: {}, page}, response, context);
+      await openDevtools().handler({params: {}, page}, response, context);
 
       sinon.assert.calledOnce(page.openDevTools);
       sinon.assert.calledOnceWithExactly(

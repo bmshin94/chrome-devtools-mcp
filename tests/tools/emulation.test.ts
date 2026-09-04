@@ -125,7 +125,7 @@ describe('emulation', () => {
   describe('network', () => {
     it('emulates offline network conditions', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {params: {networkConditions: 'Offline'}, page},
         response,
         context,
@@ -141,7 +141,7 @@ describe('emulation', () => {
 
     it('emulates network throttling when the throttling option is valid', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {params: {networkConditions: 'Slow 3G'}, page},
         response,
         context,
@@ -153,13 +153,13 @@ describe('emulation', () => {
 
     it('disables network emulation when networkConditions is omitted', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler({params: {}, page}, response, context);
+      await emulate().handler({params: {}, page}, response, context);
       sinon.assert.calledOnceWithExactly(page.emulate, {});
     });
 
     it('report correctly for the currently selected page', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {params: {networkConditions: 'Slow 3G'}, page},
         response,
         context,
@@ -173,7 +173,7 @@ describe('emulation', () => {
   describe('cpu', () => {
     it('emulates cpu throttling when the rate is valid (1-20x)', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {params: {cpuThrottlingRate: 4}, page},
         response,
         context,
@@ -187,7 +187,7 @@ describe('emulation', () => {
 
     it('disables cpu throttling when rate is 1', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {params: {cpuThrottlingRate: 1}, page},
         response,
         context,
@@ -197,7 +197,7 @@ describe('emulation', () => {
 
     it('report correctly for the currently selected page', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {params: {cpuThrottlingRate: 4}, page},
         response,
         context,
@@ -209,7 +209,7 @@ describe('emulation', () => {
   describe('geolocation', () => {
     it('emulates geolocation with latitude and longitude', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             geolocation: {
@@ -236,7 +236,7 @@ describe('emulation', () => {
 
     it('clears geolocation override when geolocation is omitted', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {},
           page,
@@ -249,7 +249,7 @@ describe('emulation', () => {
 
     it('reports correctly for the currently selected page', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             geolocation: {
@@ -274,7 +274,7 @@ describe('emulation', () => {
   describe('viewport', () => {
     it('emulates viewport', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             viewport: {
@@ -309,7 +309,7 @@ describe('emulation', () => {
 
     it('clears viewport override when viewport is omitted', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {},
           page,
@@ -322,7 +322,7 @@ describe('emulation', () => {
 
     it('reports correctly for the currently selected page', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             viewport: {
@@ -347,7 +347,7 @@ describe('emulation', () => {
   describe('userAgent', () => {
     it('emulates userAgent', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             userAgent: 'MyUA',
@@ -368,7 +368,7 @@ describe('emulation', () => {
 
     it('updates userAgent', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             userAgent: 'UA1',
@@ -382,7 +382,7 @@ describe('emulation', () => {
         userAgent: 'UA1',
       });
 
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             userAgent: 'UA2',
@@ -400,7 +400,7 @@ describe('emulation', () => {
 
     it('clears userAgent override when userAgent is omitted', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {},
           page,
@@ -413,7 +413,7 @@ describe('emulation', () => {
 
     it('reports correctly for the currently selected page', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             userAgent: 'MyUA',
@@ -432,7 +432,7 @@ describe('emulation', () => {
   describe('extraHttpHeaders', () => {
     it('emulates extraHttpHeaders', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             extraHttpHeaders: {'X-Custom-Header': 'test-value'},
@@ -453,7 +453,7 @@ describe('emulation', () => {
 
     it('clears extra headers when empty object is passed', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             extraHttpHeaders: {},
@@ -470,7 +470,7 @@ describe('emulation', () => {
 
     it('reports correctly for the currently selected page', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             extraHttpHeaders: {'X-Page': 'one'},
@@ -489,7 +489,7 @@ describe('emulation', () => {
   describe('colorScheme', () => {
     it('emulates color scheme', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             colorScheme: 'dark',
@@ -510,7 +510,7 @@ describe('emulation', () => {
 
     it('updates color scheme', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             colorScheme: 'dark',
@@ -524,7 +524,7 @@ describe('emulation', () => {
         colorScheme: 'dark',
       });
 
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             colorScheme: 'light',
@@ -542,7 +542,7 @@ describe('emulation', () => {
 
     it('resets color scheme when set to auto', async () => {
       const {page, context, response} = createHandlerMocks();
-      await emulate.handler(
+      await emulate().handler(
         {
           params: {
             colorScheme: 'auto',

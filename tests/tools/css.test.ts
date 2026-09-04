@@ -24,7 +24,7 @@ describe('get_css_styles', () => {
     );
     page.getMatchedStylesForUid.resolves(mockStyles);
 
-    await getCssStyles.handler(
+    await getCssStyles().handler(
       {params: {uid: 'element-1'}, page},
       response,
       context,
@@ -52,7 +52,7 @@ describe('get_css_styles', () => {
     );
     page.getMatchedStylesForUid.resolves(mockStyles);
 
-    await getCssStyles.handler(
+    await getCssStyles().handler(
       {params: {uid: 'element-1', pageSize: 10, pageIdx: 2}, page},
       response,
       context,

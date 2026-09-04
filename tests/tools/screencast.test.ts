@@ -289,7 +289,7 @@ describe('screencast', () => {
   describe('screencast_stop', () => {
     it('returns an error message if no recording is active', async () => {
       const {page, context, response} = createScreencastMocks();
-      await stopScreencast.handler({params: {}, page}, response, context);
+      await stopScreencast().handler({params: {}, page}, response, context);
       sinon.assert.notCalled(context.setScreenRecorder);
       sinon.assert.calledOnceWithExactly(
         response.appendResponseLine,
@@ -305,7 +305,7 @@ describe('screencast', () => {
         filePath,
       });
 
-      await stopScreencast.handler({params: {}, page}, response, context);
+      await stopScreencast().handler({params: {}, page}, response, context);
 
       sinon.assert.calledOnce(mockRecorder.stop);
       sinon.assert.calledOnceWithExactly(context.setScreenRecorder, null);
@@ -325,7 +325,7 @@ describe('screencast', () => {
       });
 
       await assert.rejects(
-        stopScreencast.handler({params: {}, page}, response, context),
+        stopScreencast().handler({params: {}, page}, response, context),
         /ffmpeg process error/,
       );
 

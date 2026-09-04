@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type {ParsedArguments} from '../config/mcp-options.js';
 import {zod} from '../third_party/index.js';
 
 import type {
@@ -19,7 +20,7 @@ export type CommentThreadPayload = CD4ACommentThread;
 export type CommentEditorPayload = CD4AEditorAnchorSignature;
 export type RevealTargetPayload = CD4ARevealTarget;
 
-export const openDevtools = definePageTool({
+export const openDevtools = definePageTool((_args: ParsedArguments) => ({
   name: 'open_devtools',
   description: 'Open a DevTools window for the selected page.',
   annotations: {
@@ -41,9 +42,9 @@ export const openDevtools = definePageTool({
     }
     response.setIncludePages(true);
   },
-});
+}));
 
-export const getDevtoolsComments = definePageTool({
+export const getDevtoolsComments = definePageTool((_args: ParsedArguments) => ({
   name: 'get_devtools_comments',
   description: 'Retrieve user comments from the DevTools window for the page.',
   annotations: {
@@ -70,69 +71,72 @@ export const getDevtoolsComments = definePageTool({
 
     response.setDevToolsComments(threads);
   },
-});
+}));
 
-export const resolveDevtoolsComment = definePageTool({
-  name: 'resolve_devtools_comment',
-  description:
-    'Append an agent reply to a DevTools comment thread and mark it as resolved.',
-  annotations: {
-    category: ToolCategory.DEBUGGING,
-    readOnlyHint: false,
-    conditions: ['devtoolsComments'],
-  },
-  schema: {
-    threadId: zod
-      .string()
-      .describe(
-        'The unique identifier of the comment thread to resolve (e.g. "comment-1").',
-      ),
-    replyText: zod
-      .string()
-      .optional()
-      .describe(
-        'Optional reply explanation from the AI agent to append to the resolved comment thread.',
-      ),
-  },
-  blockedByDialog: false,
-  verifyFilesSchema: {},
-  handler: async (request, response) => {
-    const page = request.page;
-    const devtoolsPage = await page.getDevToolsPage();
-    if (!devtoolsPage) {
-      response.appendResponseLine(
-        'DevTools window is not open for this page. Call open_devtools first to open DevTools.',
-      );
-      return;
-    }
-
-    const {threadId, replyText} = request.params;
-    const success = await devtoolsPage.evaluate(
-      (id: string, reply: string | undefined) => {
-        return (
-          window.universe?.cd4aBridge?.resolveCommentThread(id, reply) ?? false
+export const resolveDevtoolsComment = definePageTool(
+  (_args: ParsedArguments) => ({
+    name: 'resolve_devtools_comment',
+    description:
+      'Append an agent reply to a DevTools comment thread and mark it as resolved.',
+    annotations: {
+      category: ToolCategory.DEBUGGING,
+      readOnlyHint: false,
+      conditions: ['devtoolsComments'],
+    },
+    schema: {
+      threadId: zod
+        .string()
+        .describe(
+          'The unique identifier of the comment thread to resolve (e.g. "comment-1").',
+        ),
+      replyText: zod
+        .string()
+        .optional()
+        .describe(
+          'Optional reply explanation from the AI agent to append to the resolved comment thread.',
+        ),
+    },
+    blockedByDialog: false,
+    verifyFilesSchema: {},
+    handler: async (request, response) => {
+      const page = request.page;
+      const devtoolsPage = await page.getDevToolsPage();
+      if (!devtoolsPage) {
+        response.appendResponseLine(
+          'DevTools window is not open for this page. Call open_devtools first to open DevTools.',
         );
-      },
-      threadId,
-      replyText,
-    );
-
-    if (success) {
-      response.appendResponseLine(
-        `Comment thread ${threadId} resolved successfully.`,
-      );
-      if (replyText) {
-        response.appendResponseLine(`Agent reply added: "${replyText}"`);
+        return;
       }
-    } else {
-      response.appendResponseLine(
-        `Failed to resolve comment thread "${threadId}". Thread not found.`,
-      );
-    }
-  },
-});
 
-export const revealInDevtools = definePageTool({
+      const {threadId, replyText} = request.params;
+      const success = await devtoolsPage.evaluate(
+        (id: string, reply: string | undefined) => {
+          return (
+            window.universe?.cd4aBridge?.resolveCommentThread(id, reply) ??
+            false
+          );
+        },
+        threadId,
+        replyText,
+      );
+
+      if (success) {
+        response.appendResponseLine(
+          `Comment thread ${threadId} resolved successfully.`,
+        );
+        if (replyText) {
+          response.appendResponseLine(`Agent reply added: "${replyText}"`);
+        }
+      } else {
+        response.appendResponseLine(
+          `Failed to resolve comment thread "${threadId}". Thread not found.`,
+        );
+      }
+    },
+  }),
+);
+
+export const revealInDevtools = definePageTool((_args: ParsedArguments) => ({
   name: 'reveal_in_devtools',
   description:
     'Navigate DevTools to a specified panel and highlight a target DOM node or network request. The parameters uid and reqid are mutually exclusive.',
@@ -222,4 +226,4 @@ export const revealInDevtools = definePageTool({
       response.appendResponseLine(`Revealed target${targetDesc} in DevTools.`);
     }
   },
-});
+}));

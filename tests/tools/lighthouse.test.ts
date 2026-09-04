@@ -33,7 +33,7 @@ describe('lighthouse', () => {
         const page = context.getSelectedMcpPage().pptrPage;
         await page.goto(server.getRoute('/test'));
 
-        await lighthouseAudit.handler(
+        await lighthouseAudit().handler(
           {
             params: {
               mode: 'navigation',
@@ -68,7 +68,7 @@ describe('lighthouse', () => {
         .stub(lighthouseRunner, 'snapshot')
         .resolves(createMockRunnerResult());
 
-      await lighthouseAudit.handler(
+      await lighthouseAudit().handler(
         {
           params: {
             mode: 'snapshot',
@@ -91,7 +91,7 @@ describe('lighthouse', () => {
 
       await assert.rejects(
         () =>
-          lighthouseAudit.handler(
+          lighthouseAudit().handler(
             {
               params: {
                 mode: 'snapshot',
@@ -115,7 +115,7 @@ describe('lighthouse', () => {
         const page = context.getSelectedMcpPage().pptrPage;
         await page.goto(server.getRoute('/test-mobile'));
 
-        await lighthouseAudit.handler(
+        await lighthouseAudit().handler(
           {
             params: {
               mode: 'snapshot',
@@ -150,7 +150,7 @@ describe('lighthouse', () => {
           const page = context.getSelectedMcpPage().pptrPage;
           await page.goto(server.getRoute('/test-mobile'));
 
-          await lighthouseAudit.handler(
+          await lighthouseAudit().handler(
             {
               params: {
                 mode: 'snapshot',

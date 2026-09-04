@@ -27,7 +27,7 @@ describe('slim', () => {
     const script = '2 * 5';
     page.pptrPage.evaluate.resolves(10);
 
-    await evaluate.handler({params: {script}, page}, response, context);
+    await evaluate().handler({params: {script}, page}, response, context);
 
     sinon.assert.calledOnceWithExactly(page.pptrPage.evaluate, script);
     sinon.assert.calledOnceWithExactly(response.appendResponseLine, '10');
@@ -38,7 +38,7 @@ describe('slim', () => {
     const script = "throw new Error('test error')";
     page.pptrPage.evaluate.rejects(new Error('test error'));
 
-    await evaluate.handler({params: {script}, page}, response, context);
+    await evaluate().handler({params: {script}, page}, response, context);
 
     sinon.assert.calledOnceWithExactly(page.pptrPage.evaluate, script);
     sinon.assert.calledOnceWithExactly(
@@ -174,7 +174,7 @@ describe('slim', () => {
       const fixture = screenshots.basic;
       const page = context.getSelectedMcpPage().pptrPage;
       await page.setContent(fixture.html);
-      await screenshot.handler(
+      await screenshot().handler(
         {params: {format: 'png'}, page: context.getSelectedMcpPage()},
         response,
         context,
