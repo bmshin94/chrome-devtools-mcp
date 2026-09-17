@@ -216,7 +216,7 @@ export const navigatePage = definePageTool((args: ParsedArguments) => {
       let initScriptId: string | undefined;
       if (request.params.initScript) {
         const {identifier} = await page.pptrPage.evaluateOnNewDocument(
-          request.params.initScript as string,
+          request.params.initScript,
         );
         initScriptId = identifier;
       }

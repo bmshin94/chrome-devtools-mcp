@@ -55,6 +55,18 @@ export type FileVerificationOption =
       remote?: boolean;
     };
 
+type AllKeys<T> = T extends unknown ? keyof T : never;
+
+export type MergeSchema<Schema extends zod.ZodRawShape> = {
+  [K in AllKeys<Schema>]: Schema extends unknown
+    ? K extends keyof Schema
+      ? undefined extends Schema[K]
+        ? Exclude<Schema[K], undefined> | zod.ZodUndefined
+        : Schema[K]
+      : zod.ZodUndefined
+    : never;
+};
+
 export interface BaseToolDefinition<
   Schema extends zod.ZodRawShape = zod.ZodRawShape,
 > {
@@ -71,22 +83,24 @@ export interface BaseToolDefinition<
   };
   schema: Schema;
   blockedByDialog: boolean;
-  verifyFilesSchema: Partial<Record<keyof Schema, FileVerificationOption>>;
+  verifyFilesSchema: Partial<
+    Record<keyof MergeSchema<Schema>, FileVerificationOption>
+  >;
 }
 
 export interface ToolDefinition<
   Schema extends zod.ZodRawShape = zod.ZodRawShape,
 > extends BaseToolDefinition<Schema> {
   schema: Schema;
-  handler: (
+  handler(
     request: Request<Schema>,
     response: Response,
     context: Context,
-  ) => Promise<void>;
+  ): Promise<void>;
 }
 
 export interface Request<Schema extends zod.ZodRawShape> {
-  params: zod.objectOutputType<Schema, zod.ZodTypeAny>;
+  params: zod.objectOutputType<MergeSchema<Schema>, zod.ZodTypeAny>;
 }
 
 export interface ImageContentData {
@@ -415,21 +429,22 @@ export function defineTool<
 interface PageToolDefinition<
   Schema extends zod.ZodRawShape = zod.ZodRawShape,
 > extends BaseToolDefinition<Schema> {
-  handler: (
+  handler(
     request: Request<Schema> & {page: ContextPage},
     response: Response,
     context: Context,
-  ) => Promise<void>;
+  ): Promise<void>;
 }
 
 export type DefinedPageTool<Schema extends zod.ZodRawShape = zod.ZodRawShape> =
-  PageToolDefinition<Schema> & {
+  Omit<PageToolDefinition<Schema>, 'schema'> & {
+    schema: Schema & Partial<typeof pageIdSchema>;
     pageScoped: true;
-    handler: (
+    handler(
       request: Request<Schema> & {page: ContextPage},
       response: Response,
       context: Context,
-    ) => Promise<void>;
+    ): Promise<void>;
   };
 
 export function definePageTool<
@@ -439,9 +454,16 @@ export function definePageTool<
   definition: (args: Args) => PageToolDefinition<Schema>,
 ): (args?: Args) => DefinedPageTool<Schema> {
   return (args?: Args): DefinedPageTool<Schema> => {
-    const tool = definition(resolveToolArgs(args) as Args);
+    const resolvedArgs = resolveToolArgs(args) as Args;
+    const tool = definition(resolvedArgs);
     return {
       ...tool,
+      schema: {
+        ...(resolvedArgs.pageIdRouting && !resolvedArgs.slim
+          ? pageIdSchema
+          : {}),
+        ...tool.schema,
+      },
       pageScoped: true,
     };
   };

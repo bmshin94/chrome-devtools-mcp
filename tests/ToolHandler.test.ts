@@ -12,17 +12,21 @@ import {pathToFileURL} from 'node:url';
 
 import sinon from 'sinon';
 
-import {parseArguments} from '../src/config/mcp-options.js';
+import {
+  parseArguments,
+  type ParsedArguments,
+} from '../src/config/mcp-options.js';
 import {McpContext} from '../src/McpContext.js';
 import {McpPage} from '../src/McpPage.js';
 import {ClearcutLogger} from '../src/telemetry/ClearcutLogger.js';
 import {zod} from '../src/third_party/index.js';
 import {ToolHandler} from '../src/ToolHandler.js';
 import {ToolCategory} from '../src/tools/categories.js';
-import type {
-  DefinedPageTool,
-  DevToolsData,
-  ToolDefinition,
+import {
+  definePageTool,
+  type DefinedPageTool,
+  type DevToolsData,
+  type ToolDefinition,
 } from '../src/tools/ToolDefinition.js';
 import {createTools} from '../src/tools/tools.js';
 import {getMockBrowser} from './utils.js';
@@ -36,7 +40,10 @@ describe('ToolHandler', () => {
 
   it('calls getPageById for page scoped tools when pageId is provided', async () => {
     let handlerCalled = false;
-    const tool: DefinedPageTool = {
+    const serverArgs = parseArguments('1.0.0', ['node', 'script.js'], {
+      CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS: 'true',
+    });
+    const tool = definePageTool((_args: ParsedArguments) => ({
       name: 'page_tool',
       description: 'A page scoped tool',
       annotations: {
@@ -46,11 +53,10 @@ describe('ToolHandler', () => {
       schema: {},
       blockedByDialog: false,
       verifyFilesSchema: {},
-      pageScoped: true,
       handler: async () => {
         handlerCalled = true;
       },
-    };
+    }))(serverArgs);
 
     const mockContext = sinon.createStubInstance(McpContext);
     const mockProcess = sinon.createStubInstance(ChildProcess);
@@ -59,9 +65,6 @@ describe('ToolHandler', () => {
     mockContext.getPageById.returns(mockPage);
 
     const toolMutex = new Mutex();
-    const serverArgs = parseArguments('1.0.0', ['node', 'script.js'], {
-      CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS: 'true',
-    });
 
     const toolHandler = new ToolHandler(
       tool,
@@ -80,7 +83,12 @@ describe('ToolHandler', () => {
 
   it('calls getSelectedMcpPage for page scoped tools when pageIdRouting is disabled', async () => {
     let handlerCalled = false;
-    const tool: DefinedPageTool = {
+    const serverArgs = parseArguments(
+      '1.0.0',
+      ['node', 'script.js', '--no-page-id-routing'],
+      {CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS: 'true'},
+    );
+    const tool = definePageTool((_args: ParsedArguments) => ({
       name: 'page_tool',
       description: 'A page scoped tool',
       annotations: {
@@ -90,11 +98,10 @@ describe('ToolHandler', () => {
       schema: {},
       blockedByDialog: false,
       verifyFilesSchema: {},
-      pageScoped: true,
       handler: async () => {
         handlerCalled = true;
       },
-    };
+    }))(serverArgs);
 
     const mockContext = sinon.createStubInstance(McpContext);
     const mockProcess = sinon.createStubInstance(ChildProcess);
@@ -103,11 +110,6 @@ describe('ToolHandler', () => {
     mockContext.getSelectedMcpPage.returns(mockPage);
 
     const toolMutex = new Mutex();
-    const serverArgs = parseArguments(
-      '1.0.0',
-      ['node', 'script.js', '--no-page-id-routing'],
-      {CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS: 'true'},
-    );
 
     const toolHandler = new ToolHandler(
       tool,
@@ -188,11 +190,10 @@ describe('ToolHandler', () => {
       pageUrl?: string;
     }> = [
       {
-        tool: {
+        tool: definePageTool((_args: ParsedArguments) => ({
           ...baseTool,
           name: 'page_tool',
-          pageScoped: true,
-        },
+        }))(),
         devToolsData: {cdpBackendNodeId: 1},
         pageUrl: 'http://localhost:9222/',
       },
@@ -1055,7 +1056,7 @@ describe('ToolHandler', () => {
 
   it('rewrites file paths in params for page scoped tools', async () => {
     let receivedParams: Record<string, unknown> | undefined;
-    const tool: DefinedPageTool = {
+    const tool = definePageTool((_args: ParsedArguments) => ({
       name: 'page_file_tool',
       description: 'A page scoped tool with file verification',
       annotations: {
@@ -1069,11 +1070,10 @@ describe('ToolHandler', () => {
       verifyFilesSchema: {
         filePath: true,
       },
-      pageScoped: true,
       handler: async request => {
         receivedParams = request.params;
       },
-    };
+    }))();
 
     const mockContext = sinon.createStubInstance(McpContext);
     const mockProcess = sinon.createStubInstance(ChildProcess);

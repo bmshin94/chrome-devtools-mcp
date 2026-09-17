@@ -9,6 +9,10 @@
       {
         "name": "include_snapshot",
         "argType": "boolean"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -30,6 +34,10 @@
       {
         "name": "include_snapshot",
         "argType": "boolean"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -56,6 +64,10 @@
       {
         "name": "include_snapshot",
         "argType": "boolean"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -88,6 +100,10 @@
       },
       {
         "name": "extra_http_headers_length",
+        "argType": "number"
+      },
+      {
+        "name": "page_id",
         "argType": "number"
       }
     ]
@@ -126,8 +142,7 @@
       },
       {
         "name": "page_id",
-        "argType": "number",
-        "isDeprecated": true
+        "argType": "number"
       }
     ]
   },
@@ -155,6 +170,10 @@
       {
         "name": "include_snapshot",
         "argType": "boolean"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -168,12 +187,21 @@
       {
         "name": "include_snapshot",
         "argType": "boolean"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
   {
     "name": "get_console_message",
-    "args": []
+    "args": [
+      {
+        "name": "page_id",
+        "argType": "number"
+      }
+    ]
   },
   {
     "name": "get_network_request",
@@ -185,6 +213,10 @@
       {
         "name": "response_file_path_length",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -193,8 +225,7 @@
     "args": [
       {
         "name": "page_id",
-        "argType": "number",
-        "isDeprecated": true
+        "argType": "number"
       }
     ]
   },
@@ -208,6 +239,10 @@
       {
         "name": "prompt_text_length",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -217,6 +252,10 @@
       {
         "name": "include_snapshot",
         "argType": "boolean"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -242,6 +281,10 @@
       },
       {
         "name": "output_dir_path_length",
+        "argType": "number"
+      },
+      {
+        "name": "page_id",
         "argType": "number"
       }
     ]
@@ -272,6 +315,10 @@
       {
         "name": "include_stack_traces",
         "argType": "boolean"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -302,6 +349,10 @@
       {
         "name": "include_preserved_requests",
         "argType": "boolean"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -344,6 +395,10 @@
       {
         "name": "timeout",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -378,6 +433,10 @@
       {
         "name": "insight_name_length",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -395,6 +454,10 @@
       {
         "name": "file_path_length",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -403,6 +466,10 @@
     "args": [
       {
         "name": "file_path_length",
+        "argType": "number"
+      },
+      {
+        "name": "page_id",
         "argType": "number"
       }
     ]
@@ -417,6 +484,10 @@
       {
         "name": "include_snapshot",
         "argType": "boolean"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -439,6 +510,10 @@
       {
         "name": "height",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -453,12 +528,21 @@
       {
         "name": "file_path_length",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
   {
     "name": "screencast_stop",
-    "args": []
+    "args": [
+      {
+        "name": "page_id",
+        "argType": "number"
+      }
+    ]
   },
   {
     "name": "screenshot",
@@ -505,6 +589,10 @@
       {
         "name": "file_path_length",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -517,6 +605,10 @@
       },
       {
         "name": "file_path_length",
+        "argType": "number"
+      },
+      {
+        "name": "page_id",
         "argType": "number"
       }
     ]
@@ -539,6 +631,10 @@
       },
       {
         "name": "submit_key_length",
+        "argType": "number"
+      },
+      {
+        "name": "page_id",
         "argType": "number"
       }
     ]
@@ -567,6 +663,10 @@
       {
         "name": "file_paths_count",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
@@ -580,12 +680,21 @@
       {
         "name": "timeout",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
   {
     "name": "list_webmcp_tools",
-    "args": []
+    "args": [
+      {
+        "name": "page_id",
+        "argType": "number"
+      }
+    ]
   },
   {
     "name": "execute_webmcp_tool",
@@ -596,6 +705,10 @@
       },
       {
         "name": "input_length",
+        "argType": "number"
+      },
+      {
+        "name": "page_id",
         "argType": "number"
       }
     ]
@@ -656,12 +769,21 @@
       {
         "name": "params_length",
         "argType": "number"
+      },
+      {
+        "name": "page_id",
+        "argType": "number"
       }
     ]
   },
   {
     "name": "list3p_developer_tools",
-    "args": []
+    "args": [
+      {
+        "name": "page_id",
+        "argType": "number"
+      }
+    ]
   },
   {
     "name": "get_node_retainers",
@@ -774,6 +896,10 @@
     "args": [
       {
         "name": "file_path_length",
+        "argType": "number"
+      },
+      {
+        "name": "page_id",
         "argType": "number"
       }
     ]
@@ -1064,6 +1190,10 @@
       },
       {
         "name": "page_idx",
+        "argType": "number"
+      },
+      {
+        "name": "page_id",
         "argType": "number"
       }
     ]
